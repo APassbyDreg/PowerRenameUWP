@@ -27,7 +27,7 @@ namespace PowerRenameUWP
             foreach(var file in App.datas.files)
             {
                 TextBlock item = new TextBlock();
-                item.Text = file.path + file.name;
+                item.Text = file.path;
                 list.Items.Add(item);
             }
             updateButtons();

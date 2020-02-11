@@ -35,7 +35,20 @@ namespace PowerRenameUWP
             this.InitializeComponent();
             regexList.ItemsSource = App.datas.regex.blocks;
             sortSource.ItemsSource = App.datas.regex.blocks;
+            previewList.ItemsSource = App.datas.files;
             loadPresets();
+
+            if (App.datas.files.Count == 0)
+            {
+                fileNotSelectWarning();
+            }
+        }
+
+        private async void fileNotSelectWarning()
+        {
+            ContentDialog dialog = new WarningDialog("please select some files first");
+            ContentDialogResult result = await dialog.ShowAsync();
+            this.Frame.Navigate(typeof(SelectPage), null, new DrillInNavigationTransitionInfo());
         }
 
         private void loadPresets()
@@ -58,15 +71,24 @@ namespace PowerRenameUWP
             }
         }
 
+        private void refreshPreview()
+        {
+            if (App.datas.updateFiles() && sortSource.SelectedItem != null)
+            {
+                var item = (RegexBlock)sortSource.SelectedItem;
+                App.datas.sortAndMarkFiles(item.name, (sortRevStatus.SelectedIndex == 1));
+                previewList.ItemsSource = null;
+                previewList.ItemsSource = App.datas.files;
+            }
+        }
+
         private void Nav_Next(object sender, RoutedEventArgs e)
         {
-            regexList.ItemsSource = null;
             this.Frame.Navigate(typeof(RenamePage), null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
         }
 
         private void Nav_Previous(object sender, RoutedEventArgs e)
         {
-            regexList.ItemsSource = null;
             this.Frame.Navigate(typeof(SelectPage), null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromLeft });
         }
 
@@ -74,6 +96,7 @@ namespace PowerRenameUWP
         {
             ContentDialog dialog = new EditRegexDialog(null);
             ContentDialogResult result = await dialog.ShowAsync();
+            refreshPreview();
         }
 
         private async void regexList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -84,6 +107,7 @@ namespace PowerRenameUWP
                 ContentDialogResult result = await dialog.ShowAsync();
                 regexList.SelectedItem = null;
             }
+            refreshPreview();
         }
 
         private void PresetMenuItem_Click(string name)
@@ -112,6 +136,7 @@ namespace PowerRenameUWP
             }
             var rb = new RegexBlock(presetsDict[name], _name, "", null);
             App.datas.regex.blocks.Add(rb);
+            refreshPreview();
         }
 
         private void Delete_Block(object sender, RoutedEventArgs e)
@@ -125,6 +150,7 @@ namespace PowerRenameUWP
                     break;
                 }
             }
+            refreshPreview();
         }
 
         private void patternContent_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -134,19 +160,12 @@ namespace PowerRenameUWP
 
         private void sortSource_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (App.datas.updateFiles())
-            {
-                var item = (RegexBlock) sortSource.SelectedItem;
-                App.datas.files.Sort(delegate (FileInfo f1, FileInfo f2)
-                {
-                    int val = String.Compare(f1.attribs[item.name], f2.attribs[item.name]);
-                    if (sortRevStatus.SelectedIndex == 1)
-                    {
-                        val *= -1;
-                    }
-                    return val;
-                });
-            }
+            refreshPreview();
+        }
+
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            previewList.SelectedItem = null;
         }
     }
 }

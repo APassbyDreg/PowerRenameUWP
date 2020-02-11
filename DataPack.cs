@@ -16,6 +16,7 @@ namespace PowerRenameUWP
         {
             FileInfo file = new FileInfo(path, name);
             files.Add(file);
+            updateFiles();
         }
 
         public void deleteFile(List<int> indexs)
@@ -27,6 +28,7 @@ namespace PowerRenameUWP
             {
                 files.Remove(files[i]);
             }
+            updateFiles();
         }
 
         public void clearFiles()
@@ -46,9 +48,26 @@ namespace PowerRenameUWP
             }
             else
             {
-                return false;
+                isReady = false;
             }
+            sortAndMarkFiles("", true);
             return isReady;
+        }
+
+        public void sortAndMarkFiles(string attribName, bool isRev)
+        {
+            if(attribName != "")
+            {
+                files.Sort(delegate (FileInfo f1, FileInfo f2) { return String.Compare(f1.attribs[attribName], f2.attribs[attribName]); });
+                if (isRev)
+                {
+                    files.Reverse();
+                }
+            }
+            for (int i = 0; i < files.Count; i++)
+            {
+                files[i].index = i;
+            }
         }
     }
 
@@ -58,11 +77,13 @@ namespace PowerRenameUWP
         internal string name;
         internal Dictionary<string, string> attribs = new Dictionary<string, string>();
         internal bool isReady = false;
+        internal int index = -1;
 
         internal FileInfo(string path, string name)
         {
             this.path = path;
             this.name = name;
+            this.attribs[""] = name;
         }
 
         internal bool updateAttribs(RegularExpression regex)
