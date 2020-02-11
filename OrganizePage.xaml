@@ -1,0 +1,180 @@
+﻿<Page
+    x:Class="PowerRenameUWP.OrganizePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PowerRenameUWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Name="frame" 
+          Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBlock Name="title"
+                   Grid.Row="0" Grid.Column="0"
+                   FontSize="24"
+                   FontWeight="Black"
+                   Foreground="#444455"
+                   VerticalAlignment="Center">
+            Edit the pattern of your filenames
+        </TextBlock>
+        <StackPanel Name="navButtons"
+                    Orientation="Horizontal"
+                    Grid.Row="0" Grid.Column="2"
+                    HorizontalAlignment="Center">
+            <Button Name="previous"
+                    Click="Nav_Previous"
+                    BorderThickness="0"
+                    Width="100" Height="30"
+                    Style="{StaticResource AccentButtonStyle}">
+                <TextBlock CharacterSpacing="50">Previoust</TextBlock>
+            </Button>
+            <Button Name="next"
+                    Click="Nav_Next"
+                    BorderThickness="0"
+                    Width="100" Height="30"
+                    Margin="20,0,0,0"
+                    Style="{StaticResource AccentButtonStyle}">
+                <TextBlock CharacterSpacing="50">Next</TextBlock>
+            </Button>
+        </StackPanel>
+        <Grid Grid.Row="1" Grid.ColumnSpan="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <StackPanel Name="patternPane"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        BorderThickness="1"
+                        BorderBrush="Gray">
+                <Border Height="40"
+                        Background="SlateGray">
+                    <TextBlock Foreground="White"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               CharacterSpacing="100">PATTERN</TextBlock>
+                </Border>
+                <StackPanel Name="patternContent"
+                            Margin="20"
+                            SizeChanged="patternContent_SizeChanged">
+                    <ListView Name="regexList"
+                              Grid.Row="0"  
+                              Grid.Column="0"
+                              AllowDrop="True"
+                              CanReorderItems="True"
+                              CanDrag="True"
+                              HorizontalAlignment="Center"
+                              SelectionChanged="regexList_SelectionChanged"
+                              SelectionMode="Single">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="Margin" Value="0,8,0,4"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="local:RegexBlock">
+                                <StackPanel CornerRadius="8">
+                                    <Border Height="12"
+                                            Background="SlateGray"></Border>
+                                    <Border Width="{Binding ActualWidth, ElementName=patternContent}"
+                                            Background="LightGray">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{x:Bind name}"
+                                                       Grid.Column="0"
+                                                       Height="28" 
+                                                       Padding="0,4,0,0" 
+                                                       VerticalAlignment="Center" 
+                                                       HorizontalAlignment="Center"
+                                                       Foreground="#222222"></TextBlock>
+                                            <Button FontFamily="Segoe MDL2 Assets"
+                                                    FontSize="8"
+                                                    Content="&#xE8BB;"
+                                                    Background="Transparent"
+                                                    Foreground="#666666"
+                                                    BorderThickness="0"
+                                                    Margin="0,0,4,0"
+                                                    VerticalAlignment="Center"
+                                                    Grid.Column="1"
+                                                    Click="Delete_Block"
+                                                    Tag="{x:Bind name}"
+                                                    Style="{StaticResource TextBlockButtonStyle}"></Button>
+                                        </Grid>
+                                    </Border>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <Border Height="1"
+                            Background="#dddddd"
+                            Margin="100,20,100,20"></Border>
+                    <muxc:DropDownButton CornerRadius="8"
+                                         Width="{Binding ActualWidth, ElementName=patternContent}"
+                                         Height="40"
+                                         HorizontalContentAlignment="Left"
+                                         HorizontalAlignment="Center"
+                                         BorderThickness="1"
+                                         Background="LightGray">
+                        <muxc:DropDownButton.Flyout>
+                            <MenuFlyout Placement="Bottom">
+                                <MenuFlyoutSubItem Text="Preset" x:Name="presets">
+                                    
+                                </MenuFlyoutSubItem>
+                                <MenuFlyoutSeparator Name="flyoutWidth"/>
+                                <MenuFlyoutItem Text="Custom" Click="Add_Custom"/>
+                            </MenuFlyout>
+                        </muxc:DropDownButton.Flyout>
+                        <TextBlock Foreground="#334455" FontWeight="Medium" CharacterSpacing="50" Margin="4,0,0,0">Add new pattern(s)</TextBlock>
+                    </muxc:DropDownButton>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Grid.Row="0"
+                        Grid.Column="1"
+                        BorderThickness="1"
+                        BorderBrush="Gray"
+                        Margin="20,0,0,0">
+                <Border Height="40"
+                        Background="Gray">
+                    <TextBlock Foreground="White"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               CharacterSpacing="100">PREVIEW</TextBlock>
+                </Border>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Margin="10">
+                    <TextBlock VerticalAlignment="Center" 
+                               Margin="0,0,20,0"
+                               FontSize="18">Sort by:</TextBlock>
+                    <ComboBox Width="240"></ComboBox>
+                </StackPanel>
+                <ListView Margin="10">
+                    
+                </ListView>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

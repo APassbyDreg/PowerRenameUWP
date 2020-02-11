@@ -1,0 +1,65 @@
+﻿<ContentDialog
+    x:Class="PowerRenameUWP.EditRegexDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PowerRenameUWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    mc:Ignorable="d"
+    Title="Edit Regular Expression"
+    PrimaryButtonText="OK"
+    SecondaryButtonText="Cancel"
+    DefaultButton="Primary"
+    IsPrimaryButtonEnabled="False"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+
+    <StackPanel x:Name="content">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="0,10,0,4" HorizontalAlignment="left" Grid.Column="0">Name:</TextBlock>
+            <TextBlock Margin="0,10,0,4" 
+                       x:Name="nameErrTip"
+                       HorizontalAlignment="Right"
+                       Grid.Column="1"
+                       Foreground="IndianRed"
+                       FontSize="12"
+                       Visibility="Collapsed">name conflict, try another one</TextBlock>
+        </Grid>
+        <TextBox x:Name="name" TextChanged="name_TextChanged"></TextBox>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="0,10,0,4" HorizontalAlignment="left" Grid.Column="0">Expression:</TextBlock>
+            <TextBlock Margin="0,10,0,4" 
+                       x:Name="regexErrTip"
+                       HorizontalAlignment="Right"
+                       Grid.Column="1"
+                       Foreground="IndianRed"
+                       FontSize="12"
+                       Visibility="Collapsed"></TextBlock>
+        </Grid>
+        <TextBox x:Name="regex" TextChanged="regex_TextChanged"></TextBox>
+        <TextBlock Margin="0,10,0,4">Comment:</TextBlock>
+        <TextBox x:Name="comment"></TextBox>
+        <MenuFlyoutSeparator Margin="8"/>
+        <TextBlock Margin="0,0,0,4">After Process:</TextBlock>
+        <ComboBox x:Name="process" Width="{Binding ActualWidth, ElementName=content}"></ComboBox>
+        <StackPanel Margin="0,12,0,0" Orientation="Horizontal">
+            <TextBlock VerticalAlignment="Center">Use Regex Syntax:</TextBlock>
+            <ToggleSwitch AutomationProperties.Name="simple ToggleSwitch"
+                          Margin="12,0,0,0"
+                          x:Name="expTypeSwitch"
+                          OffContent=""
+                          OnContent=""
+                          MaxWidth="120"
+                          Toggled="expTypeSwitch_Toggled"/>
+        </StackPanel>
+    </StackPanel>
+</ContentDialog>

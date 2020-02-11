@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+  <preset>
+    <name>Digits</name>
+    <regex>\d*</regex>
+  </preset>
+  <preset>
+    <name>Lower Case</name>
+    <regex>[a-z]*</regex>
+  </preset>
+  <preset>
+    <name>Upper Case</name>
+    <regex>[A-Z]*</regex>
+  </preset>
+  <preset>
+    <name>English Letters</name>
+    <regex>[a-z]|[A-Z]</regex>
+  </preset>
+  <preset>
+    <name>Anything</name>
+    <regex>.*?</regex>
+  </preset>
+  <preset>
+    <name>Chinese</name>
+    <regex>[\u2E80-\u9FBF]*</regex>
+  </preset>
+</root>

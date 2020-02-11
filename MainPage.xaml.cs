@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 //The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -26,6 +27,7 @@ namespace PowerRenameUWP
         {
             this.InitializeComponent();
             NavListBox.SelectedIndex = 1;
+            Nav(null, null);
         }
 
         private void Show_Menu(object sender, RoutedEventArgs e)
@@ -47,12 +49,34 @@ namespace PowerRenameUWP
                     NavListBox.SelectedIndex = 1;
                     break;
                 case 1: // nav to "select"
+                    ContentFrame.Navigate(typeof(SelectPage), null, new DrillInNavigationTransitionInfo());
                     break;
-                case 2: // nav to "organize"
+                case 2: // nav to "sort"
+                    ContentFrame.Navigate(typeof(OrganizePage), null, new DrillInNavigationTransitionInfo());
                     break;
                 case 3: // nav to "edit"
+                    ContentFrame.Navigate(typeof(RenamePage), null, new DrillInNavigationTransitionInfo());
                     break;
                 default:
+                    break;
+            }
+        }
+
+        private void ContentFrame_Navigated(object sender, NavigationEventArgs e)
+        {
+            switch (e.SourcePageType.Name)
+            {
+                case "SelectPage":
+                    NavListBox.SelectedIndex = 1;
+                    break;
+                case "OrganizePage":
+                    NavListBox.SelectedIndex = 2;
+                    break;
+                case "RenamePage":
+                    NavListBox.SelectedIndex = 3;
+                    break;
+                default:
+                    NavListBox.SelectedItem = null;
                     break;
             }
         }

@@ -7,6 +7,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -22,6 +23,8 @@ namespace PowerRenameUWP
     /// </summary>
     sealed partial class App : Application
     {
+        internal static DataPack datas = new DataPack();
+        internal static Processes processes = new Processes();
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -57,6 +60,10 @@ namespace PowerRenameUWP
 
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
+
+                ApplicationView.PreferredLaunchViewSize = new Size(1200, 750);
+                ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+                ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(500, 500));
             }
 
             if (e.PrelaunchActivated == false)

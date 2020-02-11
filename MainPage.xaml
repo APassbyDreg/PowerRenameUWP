@@ -10,7 +10,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <SplitView Name="MainSplitView"
-               DisplayMode="CompactOverlay" 
+               DisplayMode="CompactInline"
                CompactPaneLength="50"
                OpenPaneLength="200">
         <SplitView.Pane>
@@ -28,8 +28,7 @@
                     <ListBoxItem Height="50" Width="200"
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center"
-                             Padding="0"
-                             >
+                             Padding="0">
                         <Button Style="{StaticResource DateTimePickerFlyoutButtonStyle}"
                             FontFamily="Segoe MDL2 Assets"
                             FontSize="16"
@@ -91,8 +90,9 @@
             </Grid>
         </SplitView.Pane>
         <SplitView.Content>
-            <Frame Name="Frame">
-
+            <Frame Name="ContentFrame" 
+                   
+                   Navigated="ContentFrame_Navigated">
             </Frame>
         </SplitView.Content>
     </SplitView>
