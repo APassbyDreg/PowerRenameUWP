@@ -91,11 +91,12 @@
                         </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="local:RegexBlock">
-                                <StackPanel CornerRadius="8">
-                                    <Border Height="12"
+                                <StackPanel CornerRadius="2">
+                                    <Border Height="8"
                                             Background="SlateGray"></Border>
                                     <Border Width="{Binding ActualWidth, ElementName=patternContent}"
-                                            Background="LightGray">
+                                            Height="32"
+                                            Background="#e0e0e0">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -103,16 +104,16 @@
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Text="{x:Bind name}"
                                                        Grid.Column="0"
-                                                       Height="28" 
+                                                       Height="28"
                                                        Padding="0,4,0,0" 
                                                        VerticalAlignment="Center" 
                                                        HorizontalAlignment="Center"
-                                                       Foreground="#222222"></TextBlock>
+                                                       Foreground="#444444"></TextBlock>
                                             <Button FontFamily="Segoe MDL2 Assets"
                                                     FontSize="8"
                                                     Content="&#xE8BB;"
                                                     Background="Transparent"
-                                                    Foreground="#666666"
+                                                    Foreground="#888888"
                                                     BorderThickness="0"
                                                     Margin="0,0,4,0"
                                                     VerticalAlignment="Center"
@@ -129,8 +130,8 @@
                     <Border Height="1"
                             Background="#dddddd"
                             Margin="100,20,100,20"></Border>
-                    <muxc:DropDownButton CornerRadius="8"
-                                         Width="{Binding ActualWidth, ElementName=patternContent}"
+                    <muxc:DropDownButton Width="{Binding ActualWidth, ElementName=patternContent}"
+                                         CornerRadius="2"
                                          Height="40"
                                          HorizontalContentAlignment="Left"
                                          HorizontalAlignment="Center"
@@ -167,9 +168,26 @@
                             HorizontalAlignment="Right"
                             Margin="10">
                     <TextBlock VerticalAlignment="Center" 
-                               Margin="0,0,20,0"
+                               Margin="0,0,10,0"
                                FontSize="18">Sort by:</TextBlock>
-                    <ComboBox Width="240"></ComboBox>
+                    <ComboBox x:Name="sortSource"
+                              Width="180" 
+                              CornerRadius="4" BorderThickness="1"
+                              Foreground="#444444"
+                              SelectionChanged="sortSource_SelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="local:RegexBlock">
+                                <TextBlock Tag="{x:Bind name}" Text="{x:Bind name}" Margin="0" Padding="0"></TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <ComboBox x:Name="sortRevStatus" 
+                              Width="120" CornerRadius="4" BorderThickness="1" Margin="10,0,0,0"
+                              SelectedIndex="0" Foreground="#444444"
+                              SelectionChanged="sortSource_SelectionChanged">
+                        <ComboBoxItem>Ascending</ComboBoxItem>
+                        <ComboBoxItem>Descending</ComboBoxItem>
+                    </ComboBox>
                 </StackPanel>
                 <ListView Margin="10">
                     

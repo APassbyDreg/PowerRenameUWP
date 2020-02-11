@@ -39,6 +39,7 @@ namespace PowerRenameUWP
 
             if (block != null)
             {
+                expTypeSwitch.IsOn = true;
                 this.IsPrimaryButtonEnabled = true;
                 name.Text = block.name;
                 name.IsEnabled = false;
@@ -59,7 +60,7 @@ namespace PowerRenameUWP
 
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            if (!expTypeSwitch.IsEnabled)
+            if (!expTypeSwitch.IsOn)
             {
                 foreach (string c in regTransferCharacterList)
                 {

@@ -34,6 +34,7 @@ namespace PowerRenameUWP
         {
             this.InitializeComponent();
             regexList.ItemsSource = App.datas.regex.blocks;
+            sortSource.ItemsSource = App.datas.regex.blocks;
             loadPresets();
         }
 
@@ -87,7 +88,29 @@ namespace PowerRenameUWP
 
         private void PresetMenuItem_Click(string name)
         {
-            var rb = new RegexBlock(presetsDict[name], name, "", null);
+            int num = 0;
+            string _name = name;
+            while(true)
+            {
+                bool isRepeated = false;
+                string addon = "";
+                if (num > 0) { addon = num.ToString(); }
+                foreach (RegexBlock block in App.datas.regex.blocks)
+                {
+                    if (block.name == name + addon)
+                    {
+                        isRepeated = true;
+                        break;
+                    }
+                }
+                if(!isRepeated) 
+                {
+                    _name += addon;
+                    break; 
+                }
+                num++;
+            }
+            var rb = new RegexBlock(presetsDict[name], _name, "", null);
             App.datas.regex.blocks.Add(rb);
         }
 
@@ -107,6 +130,23 @@ namespace PowerRenameUWP
         private void patternContent_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             flyoutWidth.Width = patternContent.ActualWidth * 0.8;
+        }
+
+        private void sortSource_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (App.datas.updateFiles())
+            {
+                var item = (RegexBlock) sortSource.SelectedItem;
+                App.datas.files.Sort(delegate (FileInfo f1, FileInfo f2)
+                {
+                    int val = String.Compare(f1.attribs[item.name], f2.attribs[item.name]);
+                    if (sortRevStatus.SelectedIndex == 1)
+                    {
+                        val *= -1;
+                    }
+                    return val;
+                });
+            }
         }
     }
 }

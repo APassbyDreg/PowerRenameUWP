@@ -10,35 +10,37 @@ namespace PowerRenameUWP
         internal string expression = "";
         internal ObservableCollection<RegexBlock> blocks = new ObservableCollection<RegexBlock>();
 
+        internal RegularExpression()
+        {
+            blocks.CollectionChanged += Blocks_CollectionChanged;
+        }
+
+        private void Blocks_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            updateExp();
+        }
+
         private void updateExp()
         {
             string newexp = "";
             for (int i=0; i < blocks.Count; i++)
             {
                 newexp += "(" + blocks[i].exp + ")";
-            }     
+            }
+            expression = "^" + newexp + "$";
         }
 
         internal void add(string exp, string name, string comment, Process process)
         {
             blocks.Add(new RegexBlock(exp, name, comment, process));
-            updateExp();
         }
 
         internal void delete(int index)
         {
             blocks.Remove(blocks[index]);
-            updateExp();
         }
 
-        internal void edit(int index, string exp, string name, string comment, Process process)
-        {
-            blocks[index].exp = exp;
-            blocks[index].name = name;
-            blocks[index].comment = comment;
-            blocks[index].process = process;
-            updateExp();
-        }
+        
     }
 
 
