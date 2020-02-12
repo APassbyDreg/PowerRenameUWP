@@ -17,10 +17,10 @@ namespace PowerRenameUWP
 
         private void Blocks_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            updateExp();
+            App.datas.updateFiles();
         }
 
-        private void updateExp()
+        public void updateExp()
         {
             string newexp = "";
             for (int i=0; i < blocks.Count; i++)
@@ -39,8 +39,6 @@ namespace PowerRenameUWP
         {
             blocks.Remove(blocks[index]);
         }
-
-        
     }
 
 

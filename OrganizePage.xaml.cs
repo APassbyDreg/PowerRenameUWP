@@ -37,6 +37,9 @@ namespace PowerRenameUWP
             sortSource.ItemsSource = App.datas.regex.blocks;
             previewList.ItemsSource = App.datas.files;
             loadPresets();
+            loadSortStatus();
+
+            regexList.Items.VectorChanged += Items_VectorChanged;
 
             if (App.datas.files.Count == 0)
             {
@@ -44,11 +47,32 @@ namespace PowerRenameUWP
             }
         }
 
+        private void Items_VectorChanged(IObservableVector<object> sender, IVectorChangedEventArgs @event)
+        {
+            refreshPreview();
+        }
+
         private async void fileNotSelectWarning()
         {
             ContentDialog dialog = new WarningDialog("please select some files first");
             ContentDialogResult result = await dialog.ShowAsync();
             this.Frame.Navigate(typeof(SelectPage), null, new DrillInNavigationTransitionInfo());
+        }
+
+        private void loadSortStatus()
+        {
+            for (int i = 0; i < App.datas.regex.blocks.Count; i++)
+            {
+                if (App.datas.regex.blocks[i].name == App.datas.sortAttrib)
+                {
+                    sortSource.SelectedItem = App.datas.regex.blocks[i];
+                    break;
+                }
+            }
+            if (App.datas.sortRevStatus)
+            {
+                sortRevStatus.SelectedIndex = 1;
+            }
         }
 
         private void loadPresets()
@@ -73,13 +97,16 @@ namespace PowerRenameUWP
 
         private void refreshPreview()
         {
-            if (App.datas.updateFiles() && sortSource.SelectedItem != null)
+            if (App.datas.updateFiles())
             {
-                var item = (RegexBlock)sortSource.SelectedItem;
-                App.datas.sortAndMarkFiles(item.name, (sortRevStatus.SelectedIndex == 1));
-                previewList.ItemsSource = null;
-                previewList.ItemsSource = App.datas.files;
+                notMatchErr.Visibility = Visibility.Collapsed;
             }
+            else
+            {
+                notMatchErr.Visibility = Visibility.Visible;
+            }
+            previewList.ItemsSource = null;
+            previewList.ItemsSource = App.datas.files;
         }
 
         private void Nav_Next(object sender, RoutedEventArgs e)
@@ -96,7 +123,6 @@ namespace PowerRenameUWP
         {
             ContentDialog dialog = new EditRegexDialog(null);
             ContentDialogResult result = await dialog.ShowAsync();
-            refreshPreview();
         }
 
         private async void regexList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -158,9 +184,18 @@ namespace PowerRenameUWP
             flyoutWidth.Width = patternContent.ActualWidth * 0.8;
         }
 
-        private void sortSource_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void sortProfile_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            refreshPreview();
+            if (sortSource.SelectedItem != null)
+            {
+                var item = (RegexBlock)sortSource.SelectedItem;
+                App.datas.sortAttrib = item.name;
+                App.datas.sortRevStatus = sortRevStatus.SelectedIndex == 1;
+            }
+            if (e.RemovedItems.Count != 0)
+            {
+                refreshPreview();
+            }
         }
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)

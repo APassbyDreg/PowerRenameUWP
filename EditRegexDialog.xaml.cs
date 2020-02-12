@@ -23,6 +23,7 @@ namespace PowerRenameUWP
         RegexBlock block = null;
         bool isNameValid = false;
         bool isRegexValid = false;
+        bool isEditMode = false;
         string[] regTransferCharacterList = new string[]{"\\", "{", "}", "(", ")", "[", "]", ".", "*", "+", "?", "^", "$", "|"};
 
         internal EditRegexDialog(RegexBlock block)
@@ -39,8 +40,9 @@ namespace PowerRenameUWP
 
             if (block != null)
             {
+                isEditMode = true; 
+                IsPrimaryButtonEnabled = true;
                 expTypeSwitch.IsOn = true;
-                this.IsPrimaryButtonEnabled = true;
                 name.Text = block.name;
                 name.IsEnabled = false;
                 isNameValid = true;
@@ -84,45 +86,39 @@ namespace PowerRenameUWP
         {
         }
 
-        private void name_TextChanged(object sender, TextChangedEventArgs e)
+        private bool checkName()
         {
-            isNameValid = true;
-            if (name.Text.Length == 0)
+            var isValid = true;
+            if (!isEditMode)
             {
-                nameErrTip.Text = "provide a name";
-                isNameValid = false;
-            }
-            else
-            {
-                nameErrTip.Text = "name conflict, try another one";
-                foreach (var block in App.datas.regex.blocks)
+                if (name.Text.Length == 0)
                 {
-                    if (block.name == name.Text)
+                    nameErrTip.Text = "provide a name";
+                    isValid = false;
+                }
+                else
+                {
+                    nameErrTip.Text = "name conflict, try another one";
+                    foreach (var block in App.datas.regex.blocks)
                     {
-                        isNameValid = false;
-                        break;
+                        if (block.name == name.Text)
+                        {
+                            isValid = false;
+                            break;
+                        }
                     }
                 }
             }
-
-            this.IsPrimaryButtonEnabled = isNameValid & isRegexValid;
-            if (isNameValid)
-            {
-                nameErrTip.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                nameErrTip.Visibility = Visibility.Visible;
-            }
+            return isValid;
         }
 
-        private void regex_TextChanged(object sender, TextChangedEventArgs e)
+        private bool checkRegex()
         {
-            isRegexValid = true;
+            var isValid = true;
             if (regex.Text.Length == 0)
             {
                 regexErrTip.Text = "provide a expression";
-                isNameValid = false;
+                isValid = false;
             }
             else if (expTypeSwitch.IsOn)
             {
@@ -132,12 +128,26 @@ namespace PowerRenameUWP
                 }
                 catch (ArgumentException)
                 {
-                    isRegexValid = false;
+                    isValid = false;
                     regexErrTip.Text = "regex invalid";
                 }
             }
+            return isValid;
+        }
 
+        private void regex_name_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            isRegexValid = checkRegex();
+            isNameValid = checkName();
             this.IsPrimaryButtonEnabled = isNameValid & isRegexValid;
+            if (isNameValid)
+            {
+                nameErrTip.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                nameErrTip.Visibility = Visibility.Visible;
+            }
             if (isRegexValid)
             {
                 regexErrTip.Visibility = Visibility.Collapsed;
@@ -164,7 +174,7 @@ namespace PowerRenameUWP
                     regex.Text = regex.Text.Replace("\\" + c, c);
                 }
             }
-            regex_TextChanged(null, null);
+            regex_name_TextChanged(null, null);
         }
     }
 }

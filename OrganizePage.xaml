@@ -97,6 +97,20 @@
                                     <Border Width="{Binding ActualWidth, ElementName=patternContent}"
                                             Height="32"
                                             Background="#e0e0e0">
+                                        <ToolTipService.ToolTip>
+                                            <StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock>exp: "</TextBlock>
+                                                    <TextBlock Text="{x:Bind exp}"></TextBlock>
+                                                    <TextBlock>"</TextBlock>
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock>comment: "</TextBlock>
+                                                    <TextBlock Text="{x:Bind comment}"></TextBlock>
+                                                    <TextBlock>"</TextBlock>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </ToolTipService.ToolTip>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -164,31 +178,44 @@
                                VerticalAlignment="Center"
                                CharacterSpacing="100">PREVIEW</TextBlock>
                 </Border>
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Right"
-                            Margin="10">
-                    <TextBlock VerticalAlignment="Center" 
-                               Margin="0,0,10,0"
-                               FontSize="18">Sort by:</TextBlock>
-                    <ComboBox x:Name="sortSource"
-                              Width="180" 
-                              CornerRadius="4" BorderThickness="1"
-                              Foreground="#444444"
-                              SelectionChanged="sortSource_SelectionChanged">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate x:DataType="local:RegexBlock">
-                                <TextBlock Tag="{x:Bind name}" Text="{x:Bind name}" Margin="0" Padding="0"></TextBlock>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <ComboBox x:Name="sortRevStatus" 
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="notMatchErr"
+                               Foreground="Red" 
+                               VerticalAlignment="Center" 
+                               Margin="10"
+                               Visibility="Collapsed"
+                               FontSize="12">Regex not match</TextBlock>
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                Margin="10">
+                        <TextBlock VerticalAlignment="Center" 
+                                   Margin="0,0,10,0"
+                                   FontSize="18">Sort by:</TextBlock>
+                        <ComboBox x:Name="sortSource"
+                                  Width="180" 
+                                  CornerRadius="4" BorderThickness="1"
+                                  Foreground="#444444"
+                                  SelectionChanged="sortProfile_SelectionChanged">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="local:RegexBlock">
+                                    <TextBlock Tag="{x:Bind name}" Text="{x:Bind name}" Margin="0" Padding="0"></TextBlock>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <ComboBox x:Name="sortRevStatus" 
                               Width="120" CornerRadius="4" BorderThickness="1" Margin="10,0,0,0"
                               SelectedIndex="0" Foreground="#444444"
-                              SelectionChanged="sortSource_SelectionChanged">
-                        <ComboBoxItem>Ascending</ComboBoxItem>
-                        <ComboBoxItem>Descending</ComboBoxItem>
-                    </ComboBox>
-                </StackPanel>
+                              SelectionChanged="sortProfile_SelectionChanged">
+                            <ComboBoxItem>Ascending</ComboBoxItem>
+                            <ComboBoxItem>Descending</ComboBoxItem>
+                        </ComboBox>
+                    </StackPanel>
+                </Grid>
                 <ListView x:Name="previewList"
                           Margin="10"
                           SelectionMode="Single"
@@ -217,13 +244,26 @@
                                                 <StackPanel Orientation="Horizontal"></StackPanel>
                                             </ItemsPanelTemplate>
                                         </ListView.ItemsPanel>
+                                        <ListView.ItemContainerStyle>
+                                            <Style TargetType="ListViewItem">
+                                                <Setter Property="MinWidth" Value="0"/>
+                                            </Style>
+                                        </ListView.ItemContainerStyle>
                                         <ListView.ItemTemplate>
                                             <DataTemplate x:DataType="x:String">
                                                 <Border CornerRadius="4"
                                                         Background="#f0f0f0"
                                                         Margin="-4,8,-4,8"
                                                         Padding="16,8,16,8">
-                                                    <TextBlock Text="{x:Bind}"></TextBlock>
+                                                    <TextBlock Text="{x:Bind}">
+                                                        <ToolTipService.ToolTip>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <TextBlock>string: "</TextBlock>
+                                                                <TextBlock Text="{x:Bind}"></TextBlock>
+                                                                <TextBlock>"</TextBlock>
+                                                            </StackPanel>
+                                                        </ToolTipService.ToolTip>
+                                                    </TextBlock>
                                                 </Border>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>

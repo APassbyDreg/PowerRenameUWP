@@ -11,6 +11,8 @@ namespace PowerRenameUWP
     {
         internal RegularExpression regex = new RegularExpression();
         internal List<FileInfo> files = new List<FileInfo>();
+        internal string sortAttrib = "";
+        internal bool sortRevStatus = false;
 
         public void addFile(string path, string name)
         {
@@ -38,6 +40,7 @@ namespace PowerRenameUWP
 
         public bool updateFiles()
         {
+            regex.updateExp();
             bool isReady = true;
             if (regex.blocks.Count > 0 && files.Count > 0)
             {
@@ -50,23 +53,23 @@ namespace PowerRenameUWP
             {
                 isReady = false;
             }
-            sortAndMarkFiles("", true);
+            sortAndMarkFiles();
             return isReady;
         }
 
-        public void sortAndMarkFiles(string attribName, bool isRev)
+        public void sortAndMarkFiles()
         {
-            if(attribName != "")
+            if(sortAttrib != "" && files[0].attribs.ContainsKey(sortAttrib))
             {
-                files.Sort(delegate (FileInfo f1, FileInfo f2) { return String.Compare(f1.attribs[attribName], f2.attribs[attribName]); });
-                if (isRev)
+                files.Sort(delegate (FileInfo f1, FileInfo f2) { return String.Compare(f1.attribs[sortAttrib], f2.attribs[sortAttrib]); });
+                if (sortRevStatus)
                 {
                     files.Reverse();
                 }
             }
             for (int i = 0; i < files.Count; i++)
             {
-                files[i].index = i;
+                files[i].index = i + 1;
             }
         }
     }
@@ -104,9 +107,13 @@ namespace PowerRenameUWP
                     }
                     updated[regex.blocks[i - 1].name] = attrib;
                 }
-                this.attribs = updated;
                 isReady = true;
             }
+            else
+            {
+                updated[""] = name;   
+            }
+            this.attribs = updated;
             return isReady;
         }
     }
