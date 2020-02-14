@@ -56,13 +56,18 @@
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="3*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <StackPanel Name="patternPane"
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        BorderThickness="1"
-                        BorderBrush="Gray">
+            <Grid Grid.Row="0"
+                  Grid.Column="0"
+                  BorderThickness="2"
+                  BorderBrush="Gray">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="100"/>
+                </Grid.RowDefinitions>
                 <Border Height="40"
-                        Background="SlateGray">
+                        Background="SlateGray"
+                        Grid.Row="0">
                     <TextBlock Foreground="White"
                                FontSize="20"
                                FontWeight="Bold"
@@ -70,81 +75,82 @@
                                VerticalAlignment="Center"
                                CharacterSpacing="100">PATTERN</TextBlock>
                 </Border>
-                <StackPanel Name="patternContent"
-                            Margin="20"
-                            SizeChanged="patternContent_SizeChanged">
-                    <ListView Name="regexList"
-                              Grid.Row="0"  
-                              Grid.Column="0"
-                              AllowDrop="True"
-                              CanReorderItems="True"
-                              CanDrag="True"
-                              HorizontalAlignment="Center"
-                              SelectionChanged="regexList_SelectionChanged"
-                              SelectionMode="Single">
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="Padding" Value="0"/>
-                                <Setter Property="Margin" Value="0,8,0,4"/>
-                                <Setter Property="BorderThickness" Value="0"/>
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                        <ListView.ItemTemplate>
-                            <DataTemplate x:DataType="local:RegexBlock">
-                                <StackPanel CornerRadius="2">
-                                    <Border Height="8"
-                                            Background="SlateGray"></Border>
-                                    <Border Width="{Binding ActualWidth, ElementName=patternContent}"
-                                            Height="32"
-                                            Background="#e0e0e0">
-                                        <ToolTipService.ToolTip>
-                                            <StackPanel>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock>exp: "</TextBlock>
-                                                    <TextBlock Text="{x:Bind exp}"></TextBlock>
-                                                    <TextBlock>"</TextBlock>
-                                                </StackPanel>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock>comment: "</TextBlock>
-                                                    <TextBlock Text="{x:Bind comment}"></TextBlock>
-                                                    <TextBlock>"</TextBlock>
-                                                </StackPanel>
+                <ListView Name="regexList"
+                          Grid.Row="1"
+                          AllowDrop="True"
+                          CanReorderItems="True"
+                          CanDrag="True"
+                          HorizontalAlignment="Stretch"
+                          SelectionChanged="regexList_SelectionChanged"
+                          SelectionMode="Single"
+                          Padding="20,8,20,0">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="Margin" Value="0,8,0,4"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="local:RegexBlock">
+                            <StackPanel CornerRadius="2">
+                                <Border Height="8"
+                                        Background="SlateGray"></Border>
+                                <Border Height="32"
+                                        Background="#e0e0e0">
+                                    <ToolTipService.ToolTip>
+                                        <StackPanel>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock>exp: "</TextBlock>
+                                                <TextBlock Text="{x:Bind exp}"></TextBlock>
+                                                <TextBlock>"</TextBlock>
                                             </StackPanel>
-                                        </ToolTipService.ToolTip>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Text="{x:Bind name}"
-                                                       Grid.Column="0"
-                                                       Height="28"
-                                                       Padding="0,4,0,0" 
-                                                       VerticalAlignment="Center" 
-                                                       HorizontalAlignment="Center"
-                                                       Foreground="#444444"></TextBlock>
-                                            <Button FontFamily="Segoe MDL2 Assets"
-                                                    FontSize="8"
-                                                    Content="&#xE8BB;"
-                                                    Background="Transparent"
-                                                    Foreground="#888888"
-                                                    BorderThickness="0"
-                                                    Margin="0,0,4,0"
-                                                    VerticalAlignment="Center"
-                                                    Grid.Column="1"
-                                                    Click="Delete_Block"
-                                                    Tag="{x:Bind name}"
-                                                    Style="{StaticResource TextBlockButtonStyle}"></Button>
-                                        </Grid>
-                                    </Border>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock>comment: "</TextBlock>
+                                                <TextBlock Text="{x:Bind comment}"></TextBlock>
+                                                <TextBlock>"</TextBlock>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </ToolTipService.ToolTip>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{x:Bind name}"
+                                                    Grid.Column="0"
+                                                    Height="28"
+                                                    Padding="0,4,0,0" 
+                                                    VerticalAlignment="Center" 
+                                                    HorizontalAlignment="Center"
+                                                    Foreground="#444444"></TextBlock>
+                                        <Button FontFamily="Segoe MDL2 Assets"
+                                                FontSize="8"
+                                                Content="&#xE8BB;"
+                                                Background="Transparent"
+                                                Foreground="#888888"
+                                                BorderThickness="0"
+                                                Margin="0,0,4,0"
+                                                VerticalAlignment="Center"
+                                                Grid.Column="1"
+                                                Click="Delete_Block"
+                                                Tag="{x:Bind name}"
+                                                Style="{StaticResource TextBlockButtonStyle}"></Button>
+                                    </Grid>
+                                </Border>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <StackPanel Grid.Row="2"
+                            Name="patternContent"
+                            SizeChanged="patternContent_SizeChanged"
+                            Margin="20,0,20,0">
                     <Border Height="1"
                             Background="#dddddd"
                             Margin="100,20,100,20"></Border>
-                    <muxc:DropDownButton Width="{Binding ActualWidth, ElementName=patternContent}"
+                    <muxc:DropDownButton Name="editDropdown" 
                                          CornerRadius="2"
                                          Height="40"
                                          HorizontalContentAlignment="Left"
@@ -154,22 +160,29 @@
                         <muxc:DropDownButton.Flyout>
                             <MenuFlyout Placement="Bottom">
                                 <MenuFlyoutSubItem Text="Preset" x:Name="presets">
-                                    
+
                                 </MenuFlyoutSubItem>
-                                <MenuFlyoutSeparator Name="flyoutWidth"/>
                                 <MenuFlyoutItem Text="Custom" Click="Add_Custom"/>
+                                <MenuFlyoutSeparator Name="flyoutWidth"/>
+                                <MenuFlyoutItem Text="Clear All" Click="Clear_Regex"/>
                             </MenuFlyout>
                         </muxc:DropDownButton.Flyout>
                         <TextBlock Foreground="#334455" FontWeight="Medium" CharacterSpacing="50" Margin="4,0,0,0">Add new pattern(s)</TextBlock>
                     </muxc:DropDownButton>
                 </StackPanel>
-            </StackPanel>
-            <StackPanel Grid.Row="0"
-                        Grid.Column="1"
-                        BorderThickness="1"
-                        BorderBrush="Gray"
-                        Margin="20,0,0,0">
-                <Border Height="40"
+            </Grid>
+            <Grid Grid.Row="0"
+                  Grid.Column="1"
+                  BorderThickness="2"
+                  BorderBrush="Gray"
+                  Margin="20,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0"
+                        Height="40"
                         Background="Gray">
                     <TextBlock Foreground="White"
                                FontSize="20"
@@ -178,7 +191,7 @@
                                VerticalAlignment="Center"
                                CharacterSpacing="100">PREVIEW</TextBlock>
                 </Border>
-                <Grid>
+                <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
@@ -186,7 +199,7 @@
                     <TextBlock x:Name="notMatchErr"
                                Foreground="Red" 
                                VerticalAlignment="Center" 
-                               Margin="10"
+                               Margin="12"
                                Visibility="Collapsed"
                                FontSize="12">Regex not match</TextBlock>
                     <StackPanel Grid.Column="1"
@@ -195,7 +208,8 @@
                                 Margin="10">
                         <TextBlock VerticalAlignment="Center" 
                                    Margin="0,0,10,0"
-                                   FontSize="18">Sort by:</TextBlock>
+                                   FontSize="18"
+                                   FontWeight="Medium">Sort by:</TextBlock>
                         <ComboBox x:Name="sortSource"
                                   Width="180" 
                                   CornerRadius="4" BorderThickness="1"
@@ -216,10 +230,16 @@
                         </ComboBox>
                     </StackPanel>
                 </Grid>
-                <ListView x:Name="previewList"
-                          Margin="10"
-                          SelectionMode="Single"
-                          SelectionChanged="ListView_SelectionChanged">
+                <ListView Grid.Row="2"
+                          x:Name="previewList"
+                          Margin="12,0,12,12"
+                          SelectionMode="None"
+                          HorizontalAlignment="Stretch">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="local:FileInfo">
                             <StackPanel>
@@ -238,7 +258,8 @@
                                     <ListView x:Name="splitList"
                                               ItemsSource="{x:Bind attribs.Values}"
                                               SelectionMode="None"
-                                              Margin="8,0,0,0">
+                                              Margin="8,0,0,0"
+                                              HorizontalAlignment="Stretch">
                                         <ListView.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Horizontal"></StackPanel>
@@ -247,6 +268,7 @@
                                         <ListView.ItemContainerStyle>
                                             <Style TargetType="ListViewItem">
                                                 <Setter Property="MinWidth" Value="0"/>
+                                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                                             </Style>
                                         </ListView.ItemContainerStyle>
                                         <ListView.ItemTemplate>
@@ -269,14 +291,13 @@
                                         </ListView.ItemTemplate>
                                     </ListView>
                                 </StackPanel>
-                                <Border Width="{Binding ActualWidth, ElementName=previewList}"
-                                        Height="1"
+                                <Border Height="1"
                                         Background="#ddddee"></Border>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-            </StackPanel>
+            </Grid>
         </Grid>
     </Grid>
 </Page>

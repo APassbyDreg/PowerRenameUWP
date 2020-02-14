@@ -43,7 +43,7 @@ namespace PowerRenameUWP
 
             if (App.datas.files.Count == 0)
             {
-                fileNotSelectWarning();
+                showWarning("please select some files first", typeof(SelectPage));
             }
         }
 
@@ -52,11 +52,14 @@ namespace PowerRenameUWP
             refreshPreview();
         }
 
-        private async void fileNotSelectWarning()
+        private async void showWarning(string str, Type dest)
         {
-            ContentDialog dialog = new WarningDialog("please select some files first");
+            ContentDialog dialog = new WarningDialog(str);
             ContentDialogResult result = await dialog.ShowAsync();
-            this.Frame.Navigate(typeof(SelectPage), null, new DrillInNavigationTransitionInfo());
+            if (dest != null)
+            {
+                this.Frame.Navigate(dest, null, new DrillInNavigationTransitionInfo());
+            }
         }
 
         private void loadSortStatus()
@@ -124,6 +127,11 @@ namespace PowerRenameUWP
             ContentDialog dialog = new EditRegexDialog(null);
             ContentDialogResult result = await dialog.ShowAsync();
         }
+        
+        private async void Clear_Regex(object sender, RoutedEventArgs e)
+        {
+            App.datas.regex.clear();
+        }
 
         private async void regexList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -182,6 +190,7 @@ namespace PowerRenameUWP
         private void patternContent_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             flyoutWidth.Width = patternContent.ActualWidth * 0.8;
+            editDropdown.Width = patternContent.ActualWidth;
         }
 
         private void sortProfile_SelectionChanged(object sender, SelectionChangedEventArgs e)

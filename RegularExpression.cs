@@ -10,16 +10,6 @@ namespace PowerRenameUWP
         internal string expression = "";
         internal ObservableCollection<RegexBlock> blocks = new ObservableCollection<RegexBlock>();
 
-        internal RegularExpression()
-        {
-            blocks.CollectionChanged += Blocks_CollectionChanged;
-        }
-
-        private void Blocks_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            App.datas.updateFiles();
-        }
-
         public void updateExp()
         {
             string newexp = "";
@@ -38,6 +28,11 @@ namespace PowerRenameUWP
         internal void delete(int index)
         {
             blocks.Remove(blocks[index]);
+        }
+
+        internal void clear()
+        {
+            blocks.Clear();
         }
     }
 

@@ -11,6 +11,7 @@
     <Grid Grid.Row="0" Padding="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="60"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="40"></RowDefinition>
         </Grid.RowDefinitions>
@@ -35,15 +36,27 @@
                 Style="{StaticResource AccentButtonStyle}">
             <TextBlock CharacterSpacing="50">Next</TextBlock>
         </Button>
-        <ListView Name="list"
-                  Grid.Row="1" Grid.ColumnSpan="3"
+        <Border Grid.Row="1" Grid.ColumnSpan="3"
+                Background="SlateGray"
+                VerticalAlignment="Bottom"
+                Height="40">
+            <TextBlock HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       CharacterSpacing="50">Selected Files</TextBlock>
+        </Border>
+        <ListView Grid.Row="2" Grid.ColumnSpan="3"
+                  Name="list"
                   SelectionMode="Multiple"
-                  Margin="0,0,0,20"
+                  SelectionChanged="ListView_SelectionChanged"
+                  VerticalAlignment="Top"
+                  BorderBrush="SlateGray"
                   BorderThickness="2"
-                  BorderBrush="LightGray"
-                  SelectionChanged="ListView_SelectionChanged">
+                  Margin="0,0,0,12">
         </ListView>
-        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
+        <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal">
             <Button Name="buttonAdd" 
                     MinWidth="80" 
                     Click="Select_Files"
@@ -62,10 +75,10 @@
                     Click="Clear_All"
                     BorderThickness="1"
                     Margin="20,0,0,0"
-                    Style="{StaticResource ButtonRevealStyle}">Clear All</Button>       
+                    Style="{StaticResource ButtonRevealStyle}">Clear All</Button>
         </StackPanel>
         <Button Name="buttonChooseAll" 
-                Grid.Row="2" Grid.Column="1"
+                Grid.Row="3" Grid.Column="1"
                 HorizontalAlignment="Right"
                 MinWidth="120" 
                 IsEnabled="False"
@@ -73,7 +86,7 @@
                 BorderThickness="1"
                 Style="{StaticResource ButtonRevealStyle}">Select All</Button>
         <Button Name="buttonUnchooseAll" 
-                Grid.Row="2" Grid.Column="2"
+                Grid.Row="3" Grid.Column="2"
                 HorizontalAlignment="Right"
                 MinWidth="120" 
                 IsEnabled="False"

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -11,14 +12,26 @@ namespace PowerRenameUWP
     {
         internal RegularExpression regex = new RegularExpression();
         internal List<FileInfo> files = new List<FileInfo>();
+        internal ObservableCollection<string> names = new ObservableCollection<string>();
         internal string sortAttrib = "";
         internal bool sortRevStatus = false;
 
         public void addFile(string path, string name)
         {
-            FileInfo file = new FileInfo(path, name);
-            files.Add(file);
-            updateFiles();
+            bool isDuplicate = false;
+            foreach (var f in files)
+            {
+                if (f.name == name && f.path == path)
+                {
+                    isDuplicate = true;
+                    break;
+                }
+            }
+            if (!isDuplicate)
+            {
+                files.Add(new FileInfo(path, name));
+                updateFiles();
+            }
         }
 
         public void deleteFile(List<int> indexs)
@@ -46,7 +59,7 @@ namespace PowerRenameUWP
             {
                 foreach (var f in files)
                 {
-                    isReady = isReady && f.updateAttribs(regex);
+                    isReady = f.updateAttribs(regex) && isReady;
                 }
             }
             else

@@ -53,7 +53,7 @@ namespace PowerRenameUWP
                 foreach(var file in files)
                 {
                     App.datas.addFile(file.Path, file.DisplayName);
-                }
+                }   
             }
             updateList();
         }

@@ -8,7 +8,220 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid>
+    <Grid Name="frame" 
+          Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBlock Name="title"
+                   Grid.Row="0" Grid.Column="0"
+                   FontSize="24"
+                   FontWeight="Black"
+                   Foreground="#444455"
+                   VerticalAlignment="Center">
+            Set new name of your files
+        </TextBlock>
+        <StackPanel Name="navButtons"
+                    Orientation="Horizontal"
+                    Grid.Row="0" Grid.Column="2"
+                    HorizontalAlignment="Center">
+            <Button Name="previous"
+                    Click="Nav_Previous"
+                    BorderThickness="0"
+                    Width="100" Height="30"
+                    Style="{StaticResource AccentButtonStyle}">
+                <TextBlock CharacterSpacing="50">Previoust</TextBlock>
+            </Button>
+        </StackPanel>
+        <Grid Grid.Row="1" Grid.ColumnSpan="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0"
+                  Margin="0,0,20,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0"
+                            BorderThickness="2"
+                            BorderBrush="SlateGray"
+                            Margin="0,0,0,20">
+                    <Border Background="SlateGray"
+                            Height="32">
+                        <Button HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="18"
+                                Click="Nav_Previous"
+                                Style="{StaticResource TextBlockButtonStyle}">
+                            <TextBlock Foreground="White"
+                                       FontWeight="Bold"
+                                       CharacterSpacing="100">PATTERN</TextBlock>
+                        </Button>
+                    </Border>
+                    <ListView x:Name="patternList"
+                              VerticalAlignment="Center"
+                              SelectionMode="None"
+                              IsItemClickEnabled="False">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" Margin="8,0,8,0"></StackPanel>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Margin" Value="0"/>
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="MinWidth" Value="0"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="local:RegexBlock">
+                                <Border Background="#f0f0f0"
+                                        Margin="8"
+                                        CornerRadius="4">
+                                    <ToolTipService.ToolTip>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock>exp: "</TextBlock>
+                                            <TextBlock Text="{x:Bind exp}"></TextBlock>
+                                            <TextBlock>"</TextBlock>
+                                        </StackPanel>
+                                    </ToolTipService.ToolTip>
+                                    <TextBlock Text="{x:Bind name}" Foreground="#444444"
+                                               Margin="12"></TextBlock>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+                <Grid Grid.Row="1"
+                      BorderThickness="2"
+                      BorderBrush="SlateGray">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32"/>
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0"
+                            Height="32"
+                            Background="SlateGray">
+                        <Button HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource TextBlockButtonStyle}">
+                            <TextBlock CharacterSpacing="100"
+                                       Foreground="White"
+                                       FontSize="18"
+                                       FontWeight="Bold">SELECTED FILES</TextBlock> 
+                        </Button>
+                    </Border>
+                    <StackPanel Grid.Row="1"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                Margin="12">
+                        <TextBlock VerticalAlignment="Center" 
+                                   Margin="0,0,10,0"
+                                   FontSize="18">Sort by:</TextBlock>
+                        <ComboBox x:Name="sortSource"
+                                  Width="180" 
+                                  CornerRadius="4" BorderThickness="1"
+                                  Foreground="#444444"
+                                  SelectionChanged="sortProfile_SelectionChanged">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="local:RegexBlock">
+                                    <TextBlock Tag="{x:Bind name}" Text="{x:Bind name}" Margin="0" Padding="0"></TextBlock>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <ComboBox x:Name="sortRevStatus" 
+                              Width="120" CornerRadius="4" BorderThickness="1" Margin="10,0,0,0"
+                              SelectedIndex="0" Foreground="#444444"
+                              SelectionChanged="sortProfile_SelectionChanged">
+                            <ComboBoxItem>Ascending</ComboBoxItem>
+                            <ComboBoxItem>Descending</ComboBoxItem>
+                        </ComboBox>
+                    </StackPanel>
+                    <ListView Grid.Row="2"
+                              x:Name="previewList"
+                              Margin="12,0,12,12"
+                              SelectionMode="None"
+                              HorizontalAlignment="Stretch">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="local:FileInfo">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border VerticalAlignment="Center"
+                                                Background="#444444"
+                                                CornerRadius="14"
+                                                Width="28"
+                                                Height="28">
+                                            <TextBlock Text="{x:Bind index}"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       Foreground="White"
+                                                       FontWeight="Medium"></TextBlock>
+                                        </Border>
+                                        <ListView x:Name="splitList"
+                                                  ItemsSource="{x:Bind attribs.Values}"
+                                                  SelectionMode="None"
+                                                  Margin="8,0,0,0"
+                                                  HorizontalAlignment="Stretch">
+                                            <ListView.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal"></StackPanel>
+                                                </ItemsPanelTemplate>
+                                            </ListView.ItemsPanel>
+                                            <ListView.ItemContainerStyle>
+                                                <Style TargetType="ListViewItem">
+                                                    <Setter Property="MinWidth" Value="0"/>
+                                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                                </Style>
+                                            </ListView.ItemContainerStyle>
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate x:DataType="x:String">
+                                                    <Border CornerRadius="4"
+                                                            Background="#f0f0f0"
+                                                            Margin="-4,8,-4,8"
+                                                            Padding="16,8,16,8">
+                                                        <TextBlock Text="{x:Bind}">
+                                                        <ToolTipService.ToolTip>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <TextBlock>string: "</TextBlock>
+                                                                <TextBlock Text="{x:Bind}"></TextBlock>
+                                                                <TextBlock>"</TextBlock>
+                                                            </StackPanel>
+                                                        </ToolTipService.ToolTip>
+                                                    </TextBlock>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                    </StackPanel>
+                                    <Border Height="1"
+                                            Background="#ddddee"></Border>  
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Grid>
 
+            <StackPanel Grid.Column="1">
+                
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>
